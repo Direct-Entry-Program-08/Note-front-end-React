@@ -14,6 +14,7 @@ export default class App extends React.Component<any, {notes:Array<NoteDTO>}>{
         super(props);
         this.state  = {notes:[]};
         this.addNote = this.addNote.bind(this);
+        this.deleteNote = this.deleteNote.bind(this);
     }
 
     componentDidMount() {
@@ -45,6 +46,20 @@ export default class App extends React.Component<any, {notes:Array<NoteDTO>}>{
         }
     }
 
+    async deleteNote(noteDTO: NoteDTO){
+       const response = await fetch(`http://localhost:8080/notes/api/v1/users/${USER_ID}/notes/${noteDTO.id}`,
+           {method: 'DELETE'});
+
+       if(response.status === 204){
+           // const elementToBeRemove = this.state.notes.indexOf(noteDTO);
+           // this.state.notes.splice(elementToBeRemove, 1);
+           const newArray = this.state.notes.filter(n=>n !== noteDTO);
+           this.setState({
+               notes: newArray
+           });
+       }
+    }
+
   render() {
     return (
         <React.Fragment>
@@ -52,7 +67,7 @@ export default class App extends React.Component<any, {notes:Array<NoteDTO>}>{
             <h1 className="text-center mt-3">Simple Note Taking React App</h1>
           </header>
             <Input onAdd={this.addNote} />
-            {this.state.notes.map(note=><Note key={note.id} noteDTO={note}/> )}
+            {this.state.notes.map(note=><Note key={note.id} noteDTO={note} onDelete={this.deleteNote}/> )}
 
         </React.Fragment>
     );

@@ -3,10 +3,10 @@ import React from "react";
 import {NoteDTO} from "../../dto/NoteDTO";
 
 
-export default function Note({noteDTO}: {noteDTO: NoteDTO }){
+export default function Note({noteDTO, onDelete}: {noteDTO: NoteDTO , onDelete:(note:NoteDTO)=>void}){
 
     function deleteNote(){
-
+        onDelete(noteDTO);
     }
 
     return(
